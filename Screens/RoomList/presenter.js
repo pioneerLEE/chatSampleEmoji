@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 const { height, width } = Dimensions.get('screen');
 import PropTypes from 'prop-types';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +27,7 @@ class RoomListPresenter extends React.Component {
     navigation: PropTypes.shape({
       navigate: PropTypes.func.isRequired,
     }).isRequired,
+    Rooms:PropTypes.func
   };
 
   render() {
@@ -34,15 +36,26 @@ class RoomListPresenter extends React.Component {
     return (
       <View style={{flex:1}}>
         <ScrollView>
-          <TouchableOpacity style={{backgroundColor:'red', height:100, width:'100%', flexDirection:'row',justifyContent:"space-between",alignItems:'center'}}>
-            <Text style={{fontSize: 20, marginLeft:20}}>
-              Soma 사람들 모두 모여라
-            </Text>
-            <Text style={{fontSize: 15, marginRight:10}}>
-              1/2
-            </Text>
-          </TouchableOpacity>
-          
+          <View style={{height:20}}/>
+          {
+            this.props.Rooms.map((room,i)=>{
+              return(
+                <TouchableOpacity style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
+                  <View style={{width:50,height:50,borderRadius:50/2,justifyContent:'center',alignItems:'center',backgroundColor:'rgb(165,182,229)', marginLeft:20}}>
+                    <SimpleLineIcons name='user' size={25} color='rgb(226,226,226)' />
+                  </View>
+                  <View style={{marginLeft:20}}>
+                    <Text style={{fontSize: 14, fontWeight:'bold',marginBottom: 3}}>
+                      {room.name}
+                    </Text>
+                    <Text style={{fontSize: 12,color:'rgb(141,141,141)',fontWeight:'100'}}>
+                      Soma 사람들 모두 모여라
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })
+          }
         </ScrollView>
       </View>
     );

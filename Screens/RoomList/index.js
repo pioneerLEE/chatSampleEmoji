@@ -24,9 +24,25 @@ class RoomList extends Component {
       color:'black',
     },
   };
-
   state = {
-    
+    Rooms: [
+      {
+        key: 1,
+        name: '이재원',
+        chats:[],
+      },
+      {
+        key: 2,
+        name: '이정필',
+        chats:[],
+      },
+      {
+        key: 3,
+        name: '김완수',
+        chats:[],
+      },
+    ],
+    isSome: false,
   };
   render() {
     console.log(this.props.profile);
