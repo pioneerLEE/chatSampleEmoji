@@ -14,16 +14,30 @@ const styles = StyleSheet.create({
 });
 MessageBubble=(props)=>{
     return (
-        <View style={{maxWidth: 250, padding: 8, borderRadius: 8,marginTop:10, backgroundColor:'rgb(123,222,64)'}}>
-            <View style={{backgroundColor:'transparent'}}>
-                <Text>
-                    {props.chat.data}
-                </Text>
+        props._isUser ?
+        (
+            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
+                <View style={{marginRight:8}}>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{props.chat.time}</Text>
+                </View>
+                <View style={{maxWidth: 250,width:props.chat.data.length*12, padding: 8, borderRadius: 20,marginTop:10, backgroundColor:'rgb(123,222,64)'}}>
+                    <Text>
+                        {props.chat.data}
+                    </Text>
+                </View>
             </View>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-end', paddingLeft: 8}}>
-                <Text style={{fontSize: 8, color: props.isUser ? '#E9EBEF' : '#878d99'}}>{props.chat.time}</Text>
+        ):(
+            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
+                <View style={{maxWidth: 250,width:props.chat.data.length*12, padding: 8, borderRadius: 8,marginTop:10, backgroundColor:'white'}}>
+                    <Text>
+                        {props.chat.data}
+                    </Text>
+                </View>
+                <View style={{marginLeft:8}}>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{props.chat.time}</Text>
+                </View>
             </View>
-        </View>
+        ) 
     )
 }
 
@@ -34,10 +48,10 @@ class Message extends React.Component {
         {
           key:1,
           user:{
-              _id:1,
+              _id:2,
               nick:'이재원',
           },
-          time:'오후2시 23분',
+          time:'오후 2:12',
           data:'아 시발 존나 많네아 시발 존나 많네아 시발 존나 많네아 시발 존나 많네아 시발 존나 많네',
           category:'text'
         },
@@ -47,8 +61,8 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
-            data:'하하하ㅏ.....',
+            time:'오후 2:12',
+            data:'나 많네아 시발 존나',
             category:'text'
           },
           {
@@ -57,7 +71,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -67,7 +81,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -77,7 +91,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -87,7 +101,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -97,7 +111,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -107,7 +121,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -117,7 +131,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -127,7 +141,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -137,7 +151,7 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
           },
@@ -147,11 +161,10 @@ class Message extends React.Component {
                 _id:1,
                 nick:'이재원',
             },
-            time:'오후2시 21분',
+            time:'오후 2:12',
             data:'하하하ㅏ.....',
             category:'text'
-          },
-        
+          }, 
     ],
     User:{
         _id:2
@@ -165,12 +178,26 @@ class Message extends React.Component {
         <View style={styles.container}>
             {
                 this.state.chats.map((chat, i)=>{
-                    console.log('message console');
-                    console.log(chat.user._id,this.state.User._id,chat.category)
                     if(chat.user._id != this.state.User._id && chat.category=='text'){
                         return(
                             <View style={{backgroundColor:'transparent',marginLeft:10}}>
-                                <MessageBubble chat={chat} />
+                                <MessageBubble chat={chat} _isUser={false} />
+                            </View>
+                        )
+                        
+                    }
+                    else if(chat.user._id == this.state.User._id && chat.category=='text'){
+                        return(
+                            <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
+                                <MessageBubble chat={chat} _isUser={true} />
+                            </View>
+                        )
+                        
+                    }
+                    else if(chat.user._id == this.state.User._id && chat.category=='emoji'){
+                        return(
+                            <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
+                                <MessageBubble chat={chat} _isUser={true} />
                             </View>
                         )
                         
