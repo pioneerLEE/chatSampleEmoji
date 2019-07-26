@@ -14,8 +14,8 @@ import {
 import { ifIphoneX,getBottomSpace } from 'react-native-iphone-x-helper';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Message from './message';
-const { height, width } = Dimensions.get('screen');
-
+const { width } = Dimensions.get('screen');
+const height = Dimensions.get('screen').height/667*600;
 
 import PropTypes from 'prop-types';
 import { TextInput } from 'react-native-gesture-handler';
@@ -40,7 +40,8 @@ class ChatPresenter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      initialPosition: new Animated.Value(0)
+      initialPosition: new Animated.Value(0),
+      KeyboardHeight:0
     }
   }
   componentDidMount () {
@@ -63,38 +64,33 @@ class ChatPresenter extends React.Component {
   }
 
   _keyboardShow = (e) => {
+    console.log('키보드 사이즈?'+e.endCoordinates.height);
     Animated.timing(
       this.state.initialPosition,
       {
         toValue: e.endCoordinates.height
       }
+      
     ).start();
   }
   render() {
     const { navigation } = this.props;
     return (
       <View style={styles.container}>
-        <View style={styles.mainContainer}>
-          <TextInput 
-            placeholder='Enter first name'
-            autoFocus
-            style={{fontSize: 24}}
-          />
-          </View>
-        
         <Animated.View style={{bottom: this.state.initialPosition}}>
-          <View style={{height:'90%',backgroundColor:'rgb(102,137,186)',justifyContent:'flex-end',alignItems:'flex-end'}}>
+          <View style={{height:height/10*9,backgroundColor:'rgb(102,137,186)',justifyContent:'flex-end',alignItems:'flex-end'}}>
             <ScrollView 
               ref={ref => this.scrollView = ref}
               onContentSizeChange={(contentWidth, contentHeight)=>{        
                   this.scrollView.scrollToEnd({animated: true});
               }}
-              style={{width:'100%'}}
+              style={{width:'100%',backgroundColor:'rgb(102,137,186)',height}}
             >
-              
+              <Message/>
+              <View style={{marginBottom:10}}/>
             </ScrollView>
           </View>
-          <View style={{height:'10%',justifyContent:'flex-end',flexDirection:'row',alignItems:'center'}}>
+          <View style={{height:height/10,justifyContent:'flex-end',flexDirection:'row',alignItems:'center'}}>
             <SimpleLineIcons name='picture' size={25} color='rgb(141,147,163)' style={{marginTop:2, marginRight:15}} />
             <View style={{width:'80%',height:'60%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
               <TextInput

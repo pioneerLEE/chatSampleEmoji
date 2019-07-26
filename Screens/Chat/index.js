@@ -27,7 +27,6 @@ class Chat extends Component {
     
   };
   render() {
-    console.log(this.props.profile);
     return (
       <ChatPresenter
       {...this.state}
