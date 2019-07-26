@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   StyleSheet,
@@ -6,61 +7,135 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  ScrollView
+  ScrollView,
+  Animated,
+  Keyboard
 } from 'react-native';
+import { ifIphoneX,getBottomSpace } from 'react-native-iphone-x-helper';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Message from './message';
 const { height, width } = Dimensions.get('screen');
+
+
 import PropTypes from 'prop-types';
+import { TextInput } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingLeft: 30,
-    paddingRight: 30,
-    backgroundColor: '#f5f5f5',
   },
+  mainContainer: {
+    flex: 1,
+    alignItems: 'center'
+  }
   
 });
 
 class ChatPresenter extends React.Component {
-  static navigationOptions = {
-    title: '방 목록',
-    headerStyle:{
-      backgroundColor:'rgb(245,245,245)',
-      height: height/667*50,
-      borderBottomWidth: 1,
-      borderBottomColor:'rgb(83,181,53)'
-    },
-    headerTitleStyle:{
-      fontSize:24,
-      color:'black',
-    },
-  };
-
   static propTypes = {
     navigation: PropTypes.shape({
       navigate: PropTypes.func.isRequired,
     }).isRequired,
   };
+  constructor(props) {
+    super(props);
+    this.state = {
+      initialPosition: new Animated.Value(0)
+    }
+  }
+  componentDidMount () {
+    this.keyboardShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardShow);
+    this.keyboardHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardHide);
+  }
 
+  componentWillUnmount() {
+    this.keyboardShowListener.remove();
+    this.keyboardHideListener.remove();
+  }
+
+  _keyboardHide = (e) => {
+    Animated.timing(
+      this.state.initialPosition,
+      {
+        toValue: 0
+      }
+    ).start();
+  }
+
+  _keyboardShow = (e) => {
+    Animated.timing(
+      this.state.initialPosition,
+      {
+        toValue: e.endCoordinates.height
+      }
+    ).start();
+  }
   render() {
     const { navigation } = this.props;
-
     return (
-      <View style={{flex:1}}>
-        <ScrollView>
-          <TouchableOpacity style={{backgroundColor:'red', height:100, width:'100%', flexDirection:'row',justifyContent:"space-between",alignItems:'center'}}>
-            <FontAwesome name={user-circle} size={20} color={'#53b535'}/>
-            <Text style={{fontSize: 20, marginLeft:20}}>
-              Soma 사람들 모두 모여라
-            </Text>
-            <Text style={{fontSize: 15, marginRight:10}}>
-              1/2
-            </Text>
-          </TouchableOpacity>
-          
-        </ScrollView>
+      <View style={styles.container}>
+        <View style={styles.mainContainer}>
+          <TextInput 
+            placeholder='Enter first name'
+            autoFocus
+            style={{fontSize: 24}}
+          />
+          </View>
+        
+        <Animated.View style={{bottom: this.state.initialPosition}}>
+          <View style={{height:'90%',backgroundColor:'rgb(102,137,186)',justifyContent:'flex-end',alignItems:'flex-end'}}>
+            <ScrollView 
+              ref={ref => this.scrollView = ref}
+              onContentSizeChange={(contentWidth, contentHeight)=>{        
+                  this.scrollView.scrollToEnd({animated: true});
+              }}
+              style={{width:'100%'}}
+            >
+              
+            </ScrollView>
+          </View>
+          <View style={{height:'10%',justifyContent:'flex-end',flexDirection:'row',alignItems:'center'}}>
+            <SimpleLineIcons name='picture' size={25} color='rgb(141,147,163)' style={{marginTop:2, marginRight:15}} />
+            <View style={{width:'80%',height:'60%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
+              <TextInput
+                placeholder="Email"
+                autoCompleteType={false}
+                autoCorrect={false}
+                style={styles.input}
+                placeholder="Message..."
+                returnKeyType="send"
+              />
+              <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}}>
+                <SimpleLineIcons name='emotsmile' size={25} color='rgb(141,147,163)' style={{marginTop:2}} />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Animated.View>
       </View>
-    );
+    )
+    /*
+    return (
+
+      <KeyboardAvoidingView
+        style={styles.container}
+      >
+        <View style={{height:'90%',backgroundColor:'rgb(102,137,186)'}}/>
+        <View style={{height:'10%'}}>
+          <View style={{width:'90%',height:'90%',backgroundColor:'rgb(246,246,246)'}}>
+          <TextInput
+            placeholder="Email"
+            autoCompleteType={false}
+            autoCorrect={false}
+            style={styles.input}
+            placeholder="Message..."
+            returnKeyType="send"
+            />
+          </View>
+        </View>
+        
+
+      </KeyboardAvoidingView>
+  );*/
   }
 }
 

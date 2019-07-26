@@ -7,15 +7,15 @@ const { height, width } = Dimensions.get('screen');
 import Signin from '../Screens/Signin';
 //import Signup from '../Screens/Signup';
 import RoomList from '../Screens/RoomList';
-//import Chat from '../Screens/Chat';
+import Chat from '../Screens/Chat';
 
 const Navi = createStackNavigator({
   SigninScreen : { screen: Signin  },
   //SignupScreen : { screen: Signup  },
   RoomlistScreen : { screen: RoomList  },
-  //ChatScreen : { screen: Chat  },
+  ChatScreen : { screen: Chat  },
 }, {
-  initialRouteName: 'RoomlistScreen',
+  initialRouteName: 'ChatScreen',
   defaultNavigationOptions:{
     headerBackTitle:null,
     headerStyle:{

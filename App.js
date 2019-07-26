@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import Navi from './Navigation/Navi';
 
+
 class App extends React.Component {
   render() {
     return (
