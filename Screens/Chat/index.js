@@ -12,16 +12,7 @@ class Chat extends Component {
   };
   static navigationOptions = {
     title: '이재원',
-    headerStyle:{
-      backgroundColor:'rgb(34,43,62)',
-      height: height/667*50,
-      borderBottomWidth: 1,
-      borderBottomColor:'rgb(34,43,62)'
-    },
-    headerTitleStyle:{
-      fontSize:20,
-      color:'white',
-    },
+    
   };
   state = {
     

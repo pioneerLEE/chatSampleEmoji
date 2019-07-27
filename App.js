@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  View,
+  View,StatusBar
 } from 'react-native';
 import Navi from './Navigation/Navi';
 
@@ -10,6 +10,7 @@ class App extends React.Component {
     return (
       //앱 컨테이너
       <View style={{flex:1}}>
+        <StatusBar barStyle="light-content" />
         <Navi/>
       </View>
     );

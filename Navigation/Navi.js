@@ -15,20 +15,20 @@ const Navi = createStackNavigator({
   RoomlistScreen : { screen: RoomList  },
   ChatScreen : { screen: Chat  },
 }, {
-  initialRouteName: 'ChatScreen',
+  initialRouteName: 'RoomlistScreen',
   defaultNavigationOptions:{
     headerBackTitle:null,
     headerStyle:{
-      backgroundColor:'rgb(245,245,245)',
-      height: height/667*72,
-      shadowColor: 'transparent',
-      borderBottomWidth: 0,
+      backgroundColor:'rgb(34,43,62)',
+      height: height/667*45,
+      borderBottomWidth: 1,
+      borderBottomColor:'rgb(34,43,62)'
     },
     headerTitleStyle:{
-      fontSize:24,
-      color:'rgb(0,0,0)',
+      fontSize:20,
+      color:'white',
     },
-    headerTintColor:'rgb(0,0,0)',
+    headerTintColor:'white',
   }
 });
 
