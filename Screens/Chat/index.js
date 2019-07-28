@@ -25,5 +25,14 @@ class Chat extends Component {
       />
     );
   }
+  _reset=()=>{
+    this.setState({isLoading:false});
+  }
+  _changeID = text => {
+    this.setState({ ID: text });
+  };
+  _changePW = text => {
+    this.setState({ PW: text });
+  }
 }
 export default Chat;

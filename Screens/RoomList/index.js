@@ -7,7 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class RoomList extends Component {
   state = {
-    visible:false,
+    visible:true,
     Rooms: [
       {
         key: 1,
@@ -32,18 +32,32 @@ class RoomList extends Component {
       navigate: PropTypes.func.isRequired,
     }).isRequired,
   };
-  
+  static navigationOptions=({navigation}) =>{
+    const { params }=navigation.state;
+    return {
+      title:'방 목록',
+      headerRight: (
+        <TouchableOpacity style={{marginRight:20}} onPressOut={navigation.getParam('open')}>
+          <MaterialIcons name='playlist-add' size={25} color='rgb(226,226,226)' />
+        </TouchableOpacity>
+      )
+    }
+  }
+  componentWillMount() {
+    this.props.navigation.setParams({ open: this._open });
+  }
+  /*
   static navigationOptions = {
     title: '방 목록',
     headerRight: (
-      <TouchableOpacity style={{marginRight:20}} onPressOut={this._open}>
+      <TouchableOpacity style={{marginRight:20}} onPressOut={()=>this._open}>
         <MaterialIcons name='playlist-add' size={25} color='rgb(226,226,226)' />
       </TouchableOpacity>
     ),
   };
-  
+  */
   render() {
-    console.log(this.state.visible);
+    console.log("visible:",this.state.visible);
     return (
       <RoomListPresenter
       {...this.state}
@@ -54,16 +68,8 @@ class RoomList extends Component {
     );
   }
   _open=()=>{
-    console("작동된다 시발")
     this.setState({
       visible:true,
-      Rooms: [
-        {
-          key: 1,
-          name: '이재진',
-          chats:[],
-        },
-      ],
     })
   }
   _close=()=>{

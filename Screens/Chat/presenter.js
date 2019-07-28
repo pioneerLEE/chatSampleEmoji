@@ -94,7 +94,6 @@ class ChatPresenter extends React.Component {
             <SimpleLineIcons name='picture' size={25} color='rgb(141,147,163)' style={{marginTop:2, marginRight:15}} />
             <View style={{width:'80%',height:'60%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
               <TextInput
-                placeholder="Email"
                 autoCompleteType={false}
                 autoCorrect={false}
                 style={styles.input}

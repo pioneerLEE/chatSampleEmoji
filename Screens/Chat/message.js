@@ -177,7 +177,7 @@ class Message extends React.Component {
     return (
         <View style={styles.container}>
             {
-                this.state.chats.map((chat, i)=>{
+                this.state.chats.map((chat, key)=>{
                     if(chat.user._id != this.state.User._id && chat.category=='text'){
                         return(
                             <View style={{backgroundColor:'transparent',marginLeft:10}}>
