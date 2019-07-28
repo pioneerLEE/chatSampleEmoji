@@ -7,7 +7,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 class RoomList extends Component {
   state = {
-    visible:true,
+    visible:false,
     Rooms: [
       {
         key: 1,

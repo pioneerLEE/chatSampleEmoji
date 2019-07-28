@@ -39,7 +39,7 @@ class AddRoom extends React.Component {
                   style={{flex:1,borderBottomLeftRadius:15,justifyContent:'center',alignItems:'center'}
                 }>
                   <View>
-                    <Text style={{color:'black',fontSize:35}}>예</Text>
+                    <Text style={{color:'black',fontSize:25}}>예</Text>
                   </View>
                 </TouchableOpacity>
                 <View style={{backgroundColor:'black',width:0.5}}/>
@@ -48,7 +48,7 @@ class AddRoom extends React.Component {
                   style={{flex:1,borderBottomRightRadius:15,justifyContent:'center',alignItems:'center'}}
                 >
                   <View>
-                    <Text style={{color:'black',fontSize:35}}>아니오</Text>
+                    <Text style={{color:'black',fontSize:25}}>아니오</Text>
                   </View>
                 </TouchableOpacity>
               </View>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Alert } from "react-native";
+import { API_URL } from '../../constants'; 
 import SigninPresenter from './presenter';
 
 class Signin extends Component {
@@ -8,9 +9,12 @@ class Signin extends Component {
     header: null,
   };
   state = {
+    USER:{},
     ID:"",
     PW:"",
     isLoading:false,
+    isfail:false,
+    islogin:false
   };
   render() {
     const {ID,PW} = this.state;
@@ -21,6 +25,7 @@ class Signin extends Component {
       {...this.props}
       changeID={this._changeID}
       changePW={this._changePW}
+      Login={this._Login}
       />
     );
   }
@@ -32,15 +37,46 @@ class Signin extends Component {
   };
   _changePW = text => {
     this.setState({ PW: text });
-  };/*
+  };
   _Login = async(ID,PW) =>{
-    const {ID,PW} = this.state; 
     if(!this.state.isLoading){
       await this.setState({
         isLoading:true
       });
       await this._tryLogin(ID,PW);
     }
-  }*/
+  }
+  _tryLogin =(ID,PW)=>{
+    fetch(`${API_URL}/signin`,{
+      method:"POST",
+      headers:{
+        "Content-Tyoe":"application/json"
+      },
+      body: JSON.stringify({
+        email:ID,
+        password:PW,
+      })
+    })
+    .then(response=>{
+      if(response.status === 200){
+        return response.json();
+      }else{
+        this.setState({
+          isLoading:false,
+          isfail:true,
+        });
+      }
+    })
+    .then(json => {
+      this.setState({
+        USER:json,
+        islogin:true
+      });
+    })
+    .catch(error =>{
+      console.error(error);
+      return { name: "network error", description: "" };
+    })
+  }
 }
 export default Signin;

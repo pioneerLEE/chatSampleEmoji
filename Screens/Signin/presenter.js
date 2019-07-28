@@ -18,11 +18,15 @@ class SigninPresenter extends React.Component {
     navigation: PropTypes.shape({
       navigate: PropTypes.func.isRequired,
     }).isRequired,
+    isfail:PropTypes.bool.isRequired,
+    USER:PropTypes.object,
     ID:PropTypes.string.isRequired,
     PW:PropTypes.string.isRequired,
     isLoading:PropTypes.bool,
     changeID:PropTypes.func.isRequired,
     changePW:PropTypes.func.isRequired,
+    Login:PropTypes.func.isRequired,
+    islogin:PropTypes.bool.isRequired,
   };
 
   render() {
@@ -31,9 +35,17 @@ class SigninPresenter extends React.Component {
       ID,
       PW,
       changeID,
-      changePW 
+      changePW,
+      Login,
+      isfail,
+      islogin,
+      USER
     } = this.props;
-
+    if(islogin){
+      navigation.navigate('RoomlistScreen',{
+        USER
+      });
+    }
     return (
       <View style={styles.container}>
         <View style={styles.titleContainer}>
@@ -59,8 +71,8 @@ class SigninPresenter extends React.Component {
           <View style={styles.loginPW}>
             <TextInput 
               placeholder="PW"
-              autoCapitalize="none"
-              autoCorrect='none'
+              autoCapitalize={'none'}
+              autoCorrect={false}
               style={styles.loginIDText}
               value={PW}
               onChangeText={changePW}
@@ -68,7 +80,10 @@ class SigninPresenter extends React.Component {
               secureTextEntry={true}
             />
           </View>
-          <TouchableOpacity style={styles.loginButton}>
+          <View style={{width:'100%', height:30,paddingTop:10}}>{
+            isfail ? <Text style={{marginLeft:5,fontSize:10,color:'red'}}>{'아이디 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요.'}</Text>:null
+          }</View> 
+          <TouchableOpacity style={styles.loginButton} onPressOut={()=>Login()}>
             <Text style={{fontSize:20, color:'white'}}>로그인</Text> 
           </TouchableOpacity>
         </View>
