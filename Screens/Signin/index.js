@@ -17,8 +17,8 @@ class Signin extends Component {
     islogin:false
   };
   render() {
-    const {ID,PW} = this.state;
-    console.log('ID:',ID,' PW',PW)
+    const {ID,PW,USER} = this.state;
+    //console.log('ID:',ID,' PW',PW,'USER',USER);
     return (
       <SigninPresenter
       {...this.state}
@@ -47,12 +47,13 @@ class Signin extends Component {
     }
   }
   _tryLogin =(ID,PW)=>{
+    console.log('tryLogin ID:',ID,' PW',PW);
     fetch(`${API_URL}/signin`,{
       method:"POST",
       headers:{
-        "Content-Tyoe":"application/json"
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify({
+      body:JSON.stringify({
         email:ID,
         password:PW,
       })
@@ -68,14 +69,16 @@ class Signin extends Component {
       }
     })
     .then(json => {
-      this.setState({
-        USER:json,
-        islogin:true
-      });
+      console.log(json);
+      if(json){
+        this.setState({
+          USER:json,
+          islogin:true
+        });
+      }
     })
     .catch(error =>{
       console.error(error);
-      return { name: "network error", description: "" };
     })
   }
 }

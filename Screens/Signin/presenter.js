@@ -83,7 +83,7 @@ class SigninPresenter extends React.Component {
           <View style={{width:'100%', height:30,paddingTop:10}}>{
             isfail ? <Text style={{marginLeft:5,fontSize:10,color:'red'}}>{'아이디 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요.'}</Text>:null
           }</View> 
-          <TouchableOpacity style={styles.loginButton} onPressOut={()=>Login()}>
+          <TouchableOpacity style={styles.loginButton} onPressOut={()=>Login(ID,PW)}>
             <Text style={{fontSize:20, color:'white'}}>로그인</Text> 
           </TouchableOpacity>
         </View>

@@ -4,9 +4,11 @@ import { Alert,Dimensions,TouchableOpacity } from "react-native";
 import RoomListPresenter from './presenter';
 const { height, width } = Dimensions.get('screen');
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { API_URL } from "../../constants";
 
 class RoomList extends Component {
   state = {
+    USER:this.props.navigation.getParam('USER',{}),
     visible:false,
     Rooms: [
       {
@@ -26,6 +28,7 @@ class RoomList extends Component {
       },
     ],
     isSome: false,
+    goRoom: null,
   };
   static propTypes = {
     navigation: PropTypes.shape({
@@ -77,11 +80,34 @@ class RoomList extends Component {
       visible:false
     })
   }
-  _addnewRoom=()=>{
-    this.setState({
+  _addnewRoom=async()=>{
+    await this.setState({
       visible:false
-    })
+    });
     //post add room data: User.nickname
+    await this._trymake();
+  }
+  _trymake=()=>{
+    fetch(`${API_URL/newroom}`,{
+      method:"POST",
+      headers:{
+        "Content-Tyoe":"application/json"
+      },
+      body: JSON.stringify({
+        userId:USER._id,
+      })
+    })
+    .then(response=>{
+      return response.json();
+    })
+    .then(json => {
+      this.setState({
+        goRoom:json
+      });
+    })
+    .catch(error =>{
+      console.error(error);
+    })
   }
 }
 export default RoomList;
