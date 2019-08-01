@@ -14,15 +14,16 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AddRoom from './AddRoom'
 
 Roomsection=(props)=>{
+  const { selectRoom,room } = this.props
   return (
     <View>
-      <TouchableOpacity style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
+      <TouchableOpacity onPressOut={()=>selectRoom(room._id)} style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
         <View style={{width:50,height:50,borderRadius:50/2,justifyContent:'center',alignItems:'center',backgroundColor:'rgb(165,182,229)', marginLeft:20}}>
           <SimpleLineIcons name='user' size={25} color='rgb(226,226,226)' />
         </View>
         <View style={{marginLeft:20}}>
           <Text style={{fontSize: 14, fontWeight:'bold',marginBottom: 3}}>
-            {props.room.name}
+            {room.creator.nick}
           </Text>
           <Text style={{fontSize: 12,color:'rgb(141,141,141)',fontWeight:'100'}}>
             Soma 사람들 모두 모여라
@@ -40,13 +41,20 @@ class RoomListPresenter extends React.Component {
     }).isRequired,
     Rooms:PropTypes.array,
     visible:PropTypes.bool.isRequired,
+    selectedRoomId:PropTypes.string.isRequired,
     close:PropTypes.func.isRequired,
-    addnewRoom:PropTypes.func.isRequired
+    addnewRoom:PropTypes.func.isRequired,
+    selectRoom:PropTypes.func.isRequired
   };
 
   render() {
-    const { navigation,visible,close,addnewRoom } = this.props;
-
+    const { navigation,visible,close,addnewRoom,selectRoom,selectedRoomId,USER } = this.props;
+    if(selectedRoomId!==""){
+      navigation.navigate('chatScreen',{
+        USER,
+        selectedRoomId
+      })
+    }
     return (
       <View style={{flex:1}}>
         <ScrollView>
@@ -54,7 +62,7 @@ class RoomListPresenter extends React.Component {
           {
             this.props.Rooms.map((room,i)=>{
               return(
-                <Roomsection room={room}/>
+                <Roomsection room={room} selectRoom={selectRoom}/>
               );
             })
           }

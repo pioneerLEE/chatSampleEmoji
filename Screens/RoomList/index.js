@@ -8,27 +8,12 @@ import { API_URL } from "../../constants";
 
 class RoomList extends Component {
   state = {
-    USER:this.props.navigation.getParam('USER',{}),
+    USER:this.props.navigation.getParam('USER'),
     visible:false,
-    Rooms: [
-      {
-        key: 1,
-        name: '이재원',
-        chats:[],
-      },
-      {
-        key: 2,
-        name: '이재원',
-        chats:[],
-      },
-      {
-        key: 3,
-        name: '이재원',
-        chats:[],
-      },
-    ],
+    Rooms:[],
     isSome: false,
     goRoom: null,
+    selectedRoomId:""
   };
   static propTypes = {
     navigation: PropTypes.shape({
@@ -48,17 +33,10 @@ class RoomList extends Component {
   }
   componentWillMount() {
     this.props.navigation.setParams({ open: this._open });
+    this._roomlistLoad();
+    //console.log('Rooms:',this.state.Rooms);
+    console.log('USER:',this.state.USER,"끝");
   }
-  /*
-  static navigationOptions = {
-    title: '방 목록',
-    headerRight: (
-      <TouchableOpacity style={{marginRight:20}} onPressOut={()=>this._open}>
-        <MaterialIcons name='playlist-add' size={25} color='rgb(226,226,226)' />
-      </TouchableOpacity>
-    ),
-  };
-  */
   render() {
     console.log("visible:",this.state.visible);
     return (
@@ -67,8 +45,27 @@ class RoomList extends Component {
       {...this.props}
       close={this._close}
       addnewRoom={this._addnewRoom}
+      selectRoom={this._selectRoom}
       />
     );
+  }
+  _roomlistLoad=()=>{
+    fetch(`${API_URL}/roomlist`,{
+      method:"GET",
+      headers:{
+        "Content-Type":"application/json"
+      },
+    })
+    .then(response=>{
+      if(response.status=200){
+        return response.json();
+      }
+    })
+    .then(json =>{
+      this.setState({
+        Rooms:json
+      })
+    })
   }
   _open=()=>{
     this.setState({
@@ -88,13 +85,13 @@ class RoomList extends Component {
     await this._trymake();
   }
   _trymake=()=>{
-    fetch(`${API_URL/newroom}`,{
+    fetch(`${API_URL}/newroom`,{
       method:"POST",
       headers:{
-        "Content-Tyoe":"application/json"
+        "Content-Type":"application/json"
       },
       body: JSON.stringify({
-        userId:USER._id,
+        userId:this.state.USER._id,
       })
     })
     .then(response=>{
@@ -108,6 +105,9 @@ class RoomList extends Component {
     .catch(error =>{
       console.error(error);
     })
+  }
+  _selectRoom=async(roomId)=>{
+
   }
 }
 export default RoomList;
