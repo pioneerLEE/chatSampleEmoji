@@ -5,17 +5,17 @@ import { createAppContainer, createStackNavigator } from "react-navigation";
 const { height, width } = Dimensions.get('screen');
 
 import Signin from '../Screens/Signin';
-//import Signup from '../Screens/Signup';
+import Signup from '../Screens/Signup';
 import RoomList from '../Screens/RoomList';
 import Chat from '../Screens/Chat';
 
 const Navi = createStackNavigator({
   SigninScreen : { screen: Signin  },
-  //SignupScreen : { screen: Signup  },
+  SignupScreen : { screen: Signup  },
   RoomlistScreen : { screen: RoomList  },
   ChatScreen : { screen: Chat  },
 }, {
-  initialRouteName: 'SigninScreen',
+  initialRouteName: 'SignupScreen',
   defaultNavigationOptions:{
     headerBackTitle:null,
     headerStyle:{

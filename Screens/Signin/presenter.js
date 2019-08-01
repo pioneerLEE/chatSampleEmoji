@@ -89,7 +89,7 @@ class SigninPresenter extends React.Component {
         </View>
         <View style={styles.signinContainer}>
           <Text style={styles.signincopyText}>아직 회원이 아니라면? </Text>
-          <TouchableOpacity onPress={() => navigation.navigate('RoomlistScreen')}>
+          <TouchableOpacity onPress={() => navigation.navigate('SignupScreen')}>
             <Text style={styles.signinText}>회원가입</Text>
           </TouchableOpacity>
         </View>
