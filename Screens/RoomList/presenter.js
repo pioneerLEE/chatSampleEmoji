@@ -14,10 +14,11 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AddRoom from './AddRoom'
 
 Roomsection=(props)=>{
-  const { selectRoom,room } = this.props
+  const { room,selectRoom } = props;
+  console.log('1room:',room);
   return (
     <View>
-      <TouchableOpacity onPressOut={()=>selectRoom(room._id)} style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
+      <TouchableOpacity onPressOut={()=>{selectRoom(room._id)}} style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
         <View style={{width:50,height:50,borderRadius:50/2,justifyContent:'center',alignItems:'center',backgroundColor:'rgb(165,182,229)', marginLeft:20}}>
           <SimpleLineIcons name='user' size={25} color='rgb(226,226,226)' />
         </View>
@@ -39,7 +40,7 @@ class RoomListPresenter extends React.Component {
     navigation: PropTypes.shape({
       navigate: PropTypes.func.isRequired,
     }).isRequired,
-    Rooms:PropTypes.array,
+    Rooms:PropTypes.array.isRequired,
     visible:PropTypes.bool.isRequired,
     selectedRoomId:PropTypes.string.isRequired,
     close:PropTypes.func.isRequired,
@@ -48,19 +49,37 @@ class RoomListPresenter extends React.Component {
   };
 
   render() {
-    const { navigation,visible,close,addnewRoom,selectRoom,selectedRoomId,USER } = this.props;
-    if(selectedRoomId!==""){
-      navigation.navigate('chatScreen',{
+    const { navigation,visible,close,addnewRoom,selectedRoomId,USER,selectRoom } = this.props;
+    if(selectedRoomId){
+      navigation.navigate('ChatScreen',{
         USER,
         selectedRoomId
-      })
+      });
     }
     return (
       <View style={{flex:1}}>
         <ScrollView>
           <View style={{height:10}}/>
           {
-            this.props.Rooms.map((room,i)=>{
+            this.props.Rooms.map((room,i)=>{/*
+              return(
+                <View>
+                  <TouchableOpacity style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
+                    <View style={{width:50,height:50,borderRadius:50/2,justifyContent:'center',alignItems:'center',backgroundColor:'rgb(165,182,229)', marginLeft:20}}>
+                      <SimpleLineIcons name='user' size={25} color='rgb(226,226,226)' />
+                    </View>
+                    <View style={{marginLeft:20}}>
+                      <Text style={{fontSize: 14, fontWeight:'bold',marginBottom: 3}}>
+                        {room.creator.nick}
+                      </Text>
+                      <Text style={{fontSize: 12,color:'rgb(141,141,141)',fontWeight:'100'}}>
+                        Soma 사람들 모두 모여라
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              );*/
+              console.log('맵핑',room)
               return(
                 <Roomsection room={room} selectRoom={selectRoom}/>
               );

@@ -1,19 +1,29 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Alert,Dimensions,TouchableOpacity } from "react-native";
+import SocketIOClient from 'socket.io-client/dist/socket.io.js';
 import RoomListPresenter from './presenter';
 const { height, width } = Dimensions.get('screen');
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { API_URL } from "../../constants";
 
+
 class RoomList extends Component {
+  constructor(props){
+    super(props);
+    this.socket = SocketIOClient(`${API_URL}/room`);
+    this.socket.emit('channel1', 'Hi room namespace server');
+    this.socket.on('newRoom',async (data)=>{
+      console.log('socketNewroom',data);
+      await this._addRoomList(data);
+    })
+  }
   state = {
     USER:this.props.navigation.getParam('USER'),
     visible:false,
     Rooms:[],
     isSome: false,
-    goRoom: null,
-    selectedRoomId:""
+    selectedRoomId:null
   };
   static propTypes = {
     navigation: PropTypes.shape({
@@ -34,11 +44,10 @@ class RoomList extends Component {
   componentWillMount() {
     this.props.navigation.setParams({ open: this._open });
     this._roomlistLoad();
-    //console.log('Rooms:',this.state.Rooms);
     console.log('USER:',this.state.USER,"끝");
   }
   render() {
-    console.log("visible:",this.state.visible);
+    console.log('Rooms:',this.state.Rooms);
     return (
       <RoomListPresenter
       {...this.state}
@@ -49,6 +58,11 @@ class RoomList extends Component {
       />
     );
   }
+  _addRoomList=async(data)=>{
+    let instanceRoom = this.state.Rooms;
+    await instanceRoom.push(data);
+    await this.setState({Rooms:instanceRoom});
+  }
   _roomlistLoad=()=>{
     fetch(`${API_URL}/roomlist`,{
       method:"GET",
@@ -57,11 +71,10 @@ class RoomList extends Component {
       },
     })
     .then(response=>{
-      if(response.status=200){
-        return response.json();
-      }
+      return response.json();
     })
     .then(json =>{
+      console.log('JSON',json);
       this.setState({
         Rooms:json
       })
@@ -83,6 +96,7 @@ class RoomList extends Component {
     });
     //post add room data: User.nickname
     await this._trymake();
+    //해당 방에 navigation
   }
   _trymake=()=>{
     fetch(`${API_URL}/newroom`,{
@@ -99,15 +113,18 @@ class RoomList extends Component {
     })
     .then(json => {
       this.setState({
-        goRoom:json
+        selectedRoomId:json._id
       });
     })
     .catch(error =>{
       console.error(error);
     })
   }
-  _selectRoom=async(roomId)=>{
-
+  _selectRoom=(roomId)=>{
+    console.log('selecting');
+    this.setState({
+      selectedRoomId:roomId
+    });
   }
 }
 export default RoomList;

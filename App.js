@@ -18,3 +18,19 @@ class App extends React.Component {
 }
 
 export default App;
+
+/*
+
+if (!version.startsWith('iOS') && !version.startsWith('tvOS')) {
+      continue;
+}
+을 
+node_modules/react-native/local-cli/runIOS/findMatchingSimulator.js
+의 44라인의
+
+if (!version.includes('iOS') && !version.includes('tvOS')) {
+continue;
+} 
+로 변경한다.
+
+*/
