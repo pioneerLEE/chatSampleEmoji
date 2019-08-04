@@ -48,7 +48,7 @@ class Message extends React.Component {
         {
           key:1,
           user:{
-              _id:2,
+              _id:'5d4082b79faa1f693aaac317',
               nick:'이재원',
           },
           time:'오후 2:12',
@@ -167,7 +167,7 @@ class Message extends React.Component {
           }, 
     ],
     User:{
-        _id:2
+        _id:'5d4082b79faa1f693aaac317'
     }
   }
   //maxWidth

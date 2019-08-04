@@ -36,6 +36,8 @@ class ChatPresenter extends React.Component {
     navigation: PropTypes.shape({
       navigate: PropTypes.func.isRequired,
     }).isRequired,
+    chats: PropTypes.array.isRequired,
+    USER: PropTypes.object.isRequired,
   };
   constructor(props) {
     super(props);
@@ -74,7 +76,7 @@ class ChatPresenter extends React.Component {
     ).start();
   }
   render() {
-    const { navigation } = this.props;
+    const { navigation,chats,USER } = this.props;
     return (
       <View style={styles.container}>
         <Animated.View style={{bottom: this.state.initialPosition}}>
@@ -86,7 +88,7 @@ class ChatPresenter extends React.Component {
               }}
               style={{width:'100%',backgroundColor:'rgb(102,137,186)',height}}
             >
-              <Message/>
+              <Message chats={chats} USER={USER}/>
               <View style={{marginBottom:10}}/>
             </ScrollView>
           </View>

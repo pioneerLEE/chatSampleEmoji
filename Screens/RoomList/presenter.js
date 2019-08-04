@@ -45,7 +45,8 @@ class RoomListPresenter extends React.Component {
     selectedRoomId:PropTypes.string.isRequired,
     close:PropTypes.func.isRequired,
     addnewRoom:PropTypes.func.isRequired,
-    selectRoom:PropTypes.func.isRequired
+    selectRoom:PropTypes.func.isRequired,
+    USER:PropTypes.object.isRequired,
   };
 
   render() {
@@ -61,24 +62,7 @@ class RoomListPresenter extends React.Component {
         <ScrollView>
           <View style={{height:10}}/>
           {
-            this.props.Rooms.map((room,i)=>{/*
-              return(
-                <View>
-                  <TouchableOpacity style={{height:70, width:'100%', flexDirection:'row',alignItems:'center'}}>
-                    <View style={{width:50,height:50,borderRadius:50/2,justifyContent:'center',alignItems:'center',backgroundColor:'rgb(165,182,229)', marginLeft:20}}>
-                      <SimpleLineIcons name='user' size={25} color='rgb(226,226,226)' />
-                    </View>
-                    <View style={{marginLeft:20}}>
-                      <Text style={{fontSize: 14, fontWeight:'bold',marginBottom: 3}}>
-                        {room.creator.nick}
-                      </Text>
-                      <Text style={{fontSize: 12,color:'rgb(141,141,141)',fontWeight:'100'}}>
-                        Soma 사람들 모두 모여라
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              );*/
+            this.props.Rooms.map((room,i)=>{
               console.log('맵핑',room)
               return(
                 <Roomsection room={room} selectRoom={selectRoom}/>
