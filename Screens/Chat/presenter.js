@@ -39,6 +39,9 @@ class ChatPresenter extends React.Component {
     }).isRequired,
     chats: PropTypes.array.isRequired,
     USER: PropTypes.object.isRequired,
+    message: PropTypes.string.isRequired,
+    changeMessage: PropTypes.func.isRequired,
+    sendMessage: PropTypes.func.isRequired,
   };
   constructor(props) {
     super(props);
@@ -82,7 +85,7 @@ class ChatPresenter extends React.Component {
     ).start();
   }
   render() {
-    const { navigation,chats,USER } = this.props;
+    const { navigation,chats,USER,message,changeMessage,sendMessage } = this.props;
     const { KeyboardHeight } = this.state; 
     return (
       <View style={styles.container}>
@@ -106,6 +109,8 @@ class ChatPresenter extends React.Component {
             </TouchableOpacity>
             <View style={{width:'75%',height:'70%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
                   <TextInput
+                    value={message}
+                    onChangeText={changeMessage}
                     autoCompleteType={false}
                     autoCorrect={false}
                     placeholder="Message..."
@@ -116,7 +121,7 @@ class ChatPresenter extends React.Component {
                 <SimpleLineIcons name='emotsmile' size={25} color='rgb(141,147,163)' style={{marginTop:2}} />
               </TouchableOpacity>
             </View>
-            <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}}>
+            <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}} onPressOut={()=>{sendMessage()}}>
               <MaterialCommunityIcons name='send-circle' size={30} color='rgb(83,181,53)' style={{marginTop:2}} />
             </TouchableOpacity>
           </View>

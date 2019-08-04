@@ -21,7 +21,7 @@ class Chat extends Component {
     });
     this.socket.on('chat',async(data)=>{
       console.log('chat_socket',data);
-      await _addChat(data);
+      await this._addChat(data);
     });
   }
   static propTypes = {
@@ -37,7 +37,7 @@ class Chat extends Component {
     USER:this.props.navigation.getParam('USER'),
     selectedRoomId:this.props.navigation.getParam('selectedRoomId'),
     exRoom:{},
-    chats:{},
+    chats:[],
     message:"",
     emoji:null,
     image:null,
@@ -51,12 +51,14 @@ class Chat extends Component {
       <ChatPresenter
       {...this.state}
       {...this.props}
+      changeMessage={this._changeMessage}
+      sendMessage={this._sendMessage}
       />
     );
   }
   _sendMessage= async() =>{
     await this._sendingTEXT();
-    this.setState({
+    await this.setState({
       message:""
     })
   }
@@ -68,11 +70,11 @@ class Chat extends Component {
       headers:{
         "Content-Type":"application/json"
       },
-      body:{
+      body: JSON.stringify({
         userId:USER._id,
         category:'text',
         messageData : message
-      }
+      })
     })
   }
 
@@ -88,6 +90,7 @@ class Chat extends Component {
     await this._joinRoom(id);
   };
   _getRoominfo = (id) =>{
+    console.log('_getRoominfo1',id);
     fetch(`${API_URL}/room/${id}`,{
       method:"GET",
       headers:{
@@ -98,8 +101,9 @@ class Chat extends Component {
       return response.json();
     })
     .then(json=>{
+      console.log('_getRoominfo2',json);
       this.setState({
-        exRoom:json
+        exRoom:json[0]
       })
     })
   }

@@ -12,173 +12,53 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
+
+//var current = current.getFullYear() + "년 " + ( current.getMonth() + 1 ) + "월 " + current.getDate() + "일 "+current.getHours() + "시 " + current.getMinutes() + "분"
 MessageBubble=(props)=>{
+    const current = new Date(props.chat.createAt)
     return (
         props._isUser ?
         (
             <View style={{flexDirection:'row', alignItems:'flex-end'}}>
                 <View style={{marginRight:8}}>
-                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{props.chat.time}</Text>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{current.getFullYear() + "년 " + ( current.getMonth() + 1 ) + "월 " + current.getDate() + "일 "+current.getHours() + "시 " + current.getMinutes() + "분"}</Text>
                 </View>
-                <View style={{maxWidth: 250,width:props.chat.data.length*12, padding: 8, borderRadius: 20,marginTop:10, backgroundColor:'rgb(123,222,64)'}}>
-                    <Text>
-                        {props.chat.data}
+                <View style={{maxWidth: 250,minWidth:45, padding: 8, borderRadius: 20,marginTop:10, backgroundColor:'rgb(123,222,64)',justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{fontSize:13,margin:5}}>
+                        {props.chat.messageData}
                     </Text>
                 </View>
             </View>
         ):(
             <View style={{flexDirection:'row', alignItems:'flex-end'}}>
-                <View style={{maxWidth: 250,width:props.chat.data.length*12, padding: 8, borderRadius: 8,marginTop:10, backgroundColor:'white'}}>
+                <View style={{maxWidth: 250,minWidth:45, padding: 8, borderRadius: 8,marginTop:10, backgroundColor:'white'}}>
                     <Text>
-                        {props.chat.data}
+                        {props.chat.messageData}
                     </Text>
                 </View>
                 <View style={{marginLeft:8}}>
-                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{props.chat.time}</Text>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{props.chat.createAt}</Text>
                 </View>
             </View>
         ) 
     )
 }
-
 class Message extends React.Component {
     
-  state ={
-    chats: [
-        {
-          key:1,
-          user:{
-              _id:'5d4082b79faa1f693aaac317',
-              nick:'이재원',
-          },
-          time:'오후 2:12',
-          data:'아 시발 존나 많네아 시발 존나 많네아 시발 존나 많네아 시발 존나 많네아 시발 존나 많네',
-          category:'text'
-        },
-        {
-            key:2,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'나 많네아 시발 존나',
-            category:'text'
-          },
-          {
-            key:3,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:4,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:5,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:6,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:7,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:8,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:9,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:10,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:11,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          },
-          {
-            key:12,
-            user:{
-                _id:1,
-                nick:'이재원',
-            },
-            time:'오후 2:12',
-            data:'하하하ㅏ.....',
-            category:'text'
-          }, 
-    ],
-    User:{
-        _id:'5d4082b79faa1f693aaac317'
-    }
-  }
   //maxWidth
+  static propTypes ={
+    chats: PropTypes.array.isRequired,
+    USER: PropTypes.object.isRequired
+  }
   
   render() {
-    console.log(this.state.chats);
+    console.log(this.props.chats);
+    const { chats,USER } = this.props;
     return (
         <View style={styles.container}>
             {
-                this.state.chats.map((chat, key)=>{
-                    if(chat.user._id != this.state.User._id && chat.category=='text'){
+                chats.map((chat, key)=>{
+                    if(chat.creator != USER._id && chat.category=='text'){
                         return(
                             <View style={{backgroundColor:'transparent',marginLeft:10}}>
                                 <MessageBubble chat={chat} _isUser={false} />
@@ -186,7 +66,7 @@ class Message extends React.Component {
                         )
                         
                     }
-                    else if(chat.user._id == this.state.User._id && chat.category=='text'){
+                    else if(chat.creator == USER._id && chat.category=='text'){
                         return(
                             <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
                                 <MessageBubble chat={chat} _isUser={true} />
@@ -194,7 +74,7 @@ class Message extends React.Component {
                         )
                         
                     }
-                    else if(chat.user._id == this.state.User._id && chat.category=='emoji'){
+                    else if(chat.creator == USER._id && chat.category=='emoji'){
                         return(
                             <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
                                 <MessageBubble chat={chat} _isUser={true} />
