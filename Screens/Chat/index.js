@@ -38,6 +38,9 @@ class Chat extends Component {
     selectedRoomId:this.props.navigation.getParam('selectedRoomId'),
     exRoom:{},
     chats:{},
+    message:"",
+    emoji:null,
+    image:null,
 
   };
   componentWillMount(){
@@ -51,7 +54,34 @@ class Chat extends Component {
       />
     );
   }
-  _chatLoad = async( id ) => {
+  _sendMessage= async() =>{
+    await this._sendingTEXT();
+    this.setState({
+      message:""
+    })
+  }
+
+  _sendingTEXT=()=>{
+    const { exRoom, USER, message }=this.state
+    fetch(`${API_URL}/room/${exRoom._id}/message`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:{
+        userId:USER._id,
+        category:'text',
+        messageData : message
+      }
+    })
+  }
+
+  _changeMessage= (text) => {
+    this.setState({
+      message:text
+    })
+  }
+  _chatLoad = async(id) => {
     //room 정보가지고 오기
     await this._getRoominfo(id);
     //해당 채팅방에 참가히기

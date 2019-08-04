@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { ifIphoneX,getBottomSpace } from 'react-native-iphone-x-helper';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Message from './message';
 const { width } = Dimensions.get('screen');
 const height = Dimensions.get('screen').height/667*600;
@@ -93,53 +94,35 @@ class ChatPresenter extends React.Component {
               onContentSizeChange={(contentWidth, contentHeight)=>{        
                   this.scrollView.scrollToEnd({animated: true});
               }}
-              style={{width:'100%',backgroundColor:'rgb(102,137,186)',height}}
+              style={{width:'100%',backgroundColor:'rgb(102,137,186)'}}
             >
               <Message chats={chats} USER={USER}/>
               <View style={{marginBottom:10}}/>
             </ScrollView>
           </View>
           <View style={{height:height/10-10,justifyContent:'flex-end',flexDirection:'row',alignItems:'center'}}>
-            <SimpleLineIcons name='picture' size={25} color='rgb(141,147,163)' style={{marginTop:2, marginRight:15}} />
-            <View style={{width:'85%',height:'70%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
-              <TextInput
-                autoCompleteType={false}
-                autoCorrect={false}
-                style={styles.input}
-                placeholder="Message..."
-                returnKeyType="send"
-              />
+            <TouchableOpacity>
+              <SimpleLineIcons name='picture' size={22} color='rgb(141,147,163)' style={{marginTop:2, marginRight:15}} />
+            </TouchableOpacity>
+            <View style={{width:'75%',height:'70%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
+                  <TextInput
+                    autoCompleteType={false}
+                    autoCorrect={false}
+                    placeholder="Message..."
+                    multiline={true}
+                    style={{fontSize: 15,width:'80%',marginBottom:2}}
+                  />
               <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}}>
                 <SimpleLineIcons name='emotsmile' size={25} color='rgb(141,147,163)' style={{marginTop:2}} />
               </TouchableOpacity>
             </View>
+            <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}}>
+              <MaterialCommunityIcons name='send-circle' size={30} color='rgb(83,181,53)' style={{marginTop:2}} />
+            </TouchableOpacity>
           </View>
         </Animated.View>
       </View>
     )
-    /*
-    return (
-
-      <KeyboardAvoidingView
-        style={styles.container}
-      >
-        <View style={{height:'90%',backgroundColor:'rgb(102,137,186)'}}/>
-        <View style={{height:'10%'}}>
-          <View style={{width:'90%',height:'90%',backgroundColor:'rgb(246,246,246)'}}>
-          <TextInput
-            placeholder="Email"
-            autoCompleteType={false}
-            autoCorrect={false}
-            style={styles.input}
-            placeholder="Message..."
-            returnKeyType="send"
-            />
-          </View>
-        </View>
-        
-
-      </KeyboardAvoidingView>
-  );*/
   }
 }
 

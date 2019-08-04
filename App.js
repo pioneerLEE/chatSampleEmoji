@@ -1,3 +1,10 @@
+
+/**
+
+// react-native run-ios --port=8088 --simulator="iPhone 8 Plus"
+// react-native run-android
+
+**/
 import React from 'react';
 import {
   View,StatusBar
