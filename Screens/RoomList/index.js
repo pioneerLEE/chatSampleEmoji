@@ -5,6 +5,7 @@ import SocketIOClient from 'socket.io-client/dist/socket.io.js';
 import RoomListPresenter from './presenter';
 const { height, width } = Dimensions.get('screen');
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { API_URL } from "../../constants";
 
 
@@ -23,7 +24,8 @@ class RoomList extends Component {
     visible:false,
     Rooms:[],
     isSome: false,
-    selectedRoomId:null
+    selectedRoomId:null,
+    loading:false
   };
   static propTypes = {
     navigation: PropTypes.shape({
@@ -34,6 +36,11 @@ class RoomList extends Component {
     const { params }=navigation.state;
     return {
       title:'방 목록',
+      headerLeft:(
+        <TouchableOpacity style={{marginLeft:10}} onPressOut={()=>{navigation.goBack()}}>
+          <SimpleLineIcons name='arrow-left' size={25} color='rgb(226,226,226)' />
+        </TouchableOpacity>
+      ),
       headerRight: (
         <TouchableOpacity style={{marginRight:20}} onPressOut={navigation.getParam('open')}>
           <MaterialIcons name='playlist-add' size={25} color='rgb(226,226,226)' />
@@ -57,6 +64,12 @@ class RoomList extends Component {
       selectRoom={this._selectRoom}
       />
     );
+  }
+  _reset=()=>{
+    this.setState({
+      Rooms:[],
+      loading:false,
+    })
   }
   _addRoomList=async(data)=>{
     let instanceRoom = this.state.Rooms;

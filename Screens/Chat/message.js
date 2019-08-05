@@ -12,8 +12,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-
-//var current = current.getFullYear() + "년 " + ( current.getMonth() + 1 ) + "월 " + current.getDate() + "일 "+current.getHours() + "시 " + current.getMinutes() + "분"
+//current.getFullYear() + "년 " + ( current.getMonth() + 1 ) + "월 " + current.getDate() + "일 "+current.getHours() + "시 " + current.getMinutes() + "분"
 MessageBubble=(props)=>{
     const current = new Date(props.chat.createAt)
     return (
@@ -21,7 +20,7 @@ MessageBubble=(props)=>{
         (
             <View style={{flexDirection:'row', alignItems:'flex-end'}}>
                 <View style={{marginRight:8}}>
-                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{current.getFullYear() + "년 " + ( current.getMonth() + 1 ) + "월 " + current.getDate() + "일 "+current.getHours() + "시 " + current.getMinutes() + "분"}</Text>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{current.getHours() + "시 " + current.getMinutes() + "분"}</Text>
                 </View>
                 <View style={{maxWidth: 250,minWidth:45, padding: 8, borderRadius: 20,marginTop:10, backgroundColor:'rgb(123,222,64)',justifyContent:'center',alignItems:'center'}}>
                     <Text style={{fontSize:13,margin:5}}>
@@ -31,13 +30,13 @@ MessageBubble=(props)=>{
             </View>
         ):(
             <View style={{flexDirection:'row', alignItems:'flex-end'}}>
-                <View style={{maxWidth: 250,minWidth:45, padding: 8, borderRadius: 8,marginTop:10, backgroundColor:'white'}}>
-                    <Text>
+                <View style={{maxWidth: 250,minWidth:45, padding: 8, borderRadius:20,marginTop:10, backgroundColor:'white',justifyContent:'center',alignItems:'center'}}>
+                    <Text style={{fontSize:13,margin:5}}>
                         {props.chat.messageData}
                     </Text>
                 </View>
                 <View style={{marginLeft:8}}>
-                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{props.chat.createAt}</Text>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{current.getHours() + "시 " + current.getMinutes() + "분"}</Text>
                 </View>
             </View>
         ) 
@@ -48,17 +47,18 @@ class Message extends React.Component {
   //maxWidth
   static propTypes ={
     chats: PropTypes.array.isRequired,
-    USER: PropTypes.object.isRequired
+    USER: PropTypes.object.isRequired,
+    exRoom: PropTypes.object.isRequired,
   }
   
   render() {
     console.log(this.props.chats);
-    const { chats,USER } = this.props;
+    const { chats,USER,exRoom } = this.props;
     return (
         <View style={styles.container}>
             {
                 chats.map((chat, key)=>{
-                    if(chat.creator != USER._id && chat.category=='text'){
+                    if( exRoom._id==chat.room && chat.creator != USER._id && chat.category=='text'){
                         return(
                             <View style={{backgroundColor:'transparent',marginLeft:10}}>
                                 <MessageBubble chat={chat} _isUser={false} />
@@ -66,7 +66,7 @@ class Message extends React.Component {
                         )
                         
                     }
-                    else if(chat.creator == USER._id && chat.category=='text'){
+                    else if( exRoom._id==chat.room && chat.creator == USER._id && chat.category=='text'){
                         return(
                             <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
                                 <MessageBubble chat={chat} _isUser={true} />
@@ -74,7 +74,7 @@ class Message extends React.Component {
                         )
                         
                     }
-                    else if(chat.creator == USER._id && chat.category=='emoji'){
+                    else if( exRoom._id==chat.room && chat.creator == USER._id && chat.category=='emoji'){
                         return(
                             <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
                                 <MessageBubble chat={chat} _isUser={true} />

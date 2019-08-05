@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { Alert,Dimensions } from "react-native";
+import { Alert,Dimensions,TouchableOpacity } from "react-native";
 import ChatPresenter from './presenter';
 import SocketIOClient from 'socket.io-client/dist/socket.io.js';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { API_URL } from '../../constants'; 
 
 const { height, width } = Dimensions.get('screen');
@@ -29,10 +30,22 @@ class Chat extends Component {
       navigate: PropTypes.func.isRequired,
     }).isRequired,
   };
-  static navigationOptions = {
-    title: '이재원',
-    
-  };
+  static navigationOptions=({navigation}) =>{
+    const {params = {}} = navigation.state;
+    const { goBack }=navigation;
+    _out=async()=>{
+      await params.outChat()
+      await goBack();
+    }
+    return {
+      title:'방 목록',
+      headerLeft:(
+        <TouchableOpacity style={{marginLeft:10}} onPressOut={_out}>
+          <SimpleLineIcons name='arrow-left' size={25} color='rgb(226,226,226)' />
+        </TouchableOpacity>
+      ),
+    }
+  }
   state = {
     USER:this.props.navigation.getParam('USER'),
     selectedRoomId:this.props.navigation.getParam('selectedRoomId'),
@@ -56,6 +69,23 @@ class Chat extends Component {
       />
     );
   }
+  componentDidMount() {
+    this.props.navigation.setParams({
+        outChat: this._outChat
+    });
+}
+_outChat=()=>{
+  const { exRoom, USER }=this.state
+  fetch(`${API_URL}/room/${exRoom._id}`,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    body: JSON.stringify({
+      userId:USER._id,
+    })
+  })
+}
   _sendMessage= async() =>{
     await this._sendingTEXT();
     await this.setState({
@@ -125,6 +155,7 @@ class Chat extends Component {
       chats:exChats
     })
   }
+  
 
   
 }

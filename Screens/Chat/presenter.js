@@ -39,6 +39,7 @@ class ChatPresenter extends React.Component {
     }).isRequired,
     chats: PropTypes.array.isRequired,
     USER: PropTypes.object.isRequired,
+    exRoom: PropTypes.object.isRequired,
     message: PropTypes.string.isRequired,
     changeMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
@@ -85,7 +86,7 @@ class ChatPresenter extends React.Component {
     ).start();
   }
   render() {
-    const { navigation,chats,USER,message,changeMessage,sendMessage } = this.props;
+    const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom } = this.props;
     const { KeyboardHeight } = this.state; 
     return (
       <View style={styles.container}>
@@ -99,7 +100,7 @@ class ChatPresenter extends React.Component {
               }}
               style={{width:'100%',backgroundColor:'rgb(102,137,186)'}}
             >
-              <Message chats={chats} USER={USER}/>
+              <Message chats={chats} USER={USER} exRoom={exRoom}/>
               <View style={{marginBottom:10}}/>
             </ScrollView>
           </View>
