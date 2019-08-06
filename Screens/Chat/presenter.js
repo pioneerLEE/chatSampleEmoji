@@ -48,7 +48,9 @@ class ChatPresenter extends React.Component {
     super(props);
     this.state = {
       initialPosition: new Animated.Value(0),
-      KeyboardHeight:0
+      messageBoxPosition:0,
+      keyboardHeight:0,
+      isShowEmoticonSection:false,
     }
   }
   componentDidMount () {
@@ -63,7 +65,7 @@ class ChatPresenter extends React.Component {
 
   _keyboardHide = (e) => {
     this.setState({
-      KeyboardHeight:0
+      messageBoxPosition:0
     });
     Animated.timing(
       this.state.initialPosition,
@@ -75,7 +77,8 @@ class ChatPresenter extends React.Component {
 
   _keyboardShow = (e) => {
     this.setState({
-      KeyboardHeight:e.endCoordinates.height
+      messageBoxPosition:e.endCoordinates.height,
+      keyboardHeight:e.endCoordinates.height
     });
     Animated.timing(
       this.state.initialPosition,
@@ -85,14 +88,17 @@ class ChatPresenter extends React.Component {
       
     ).start();
   }
+  _showEmoticonSection=()=>{
+    
+  }
   render() {
     const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom } = this.props;
-    const { KeyboardHeight } = this.state; 
+    const { messageBoxPosition,isShowEmoticonSection } = this.state; 
     return (
       <View style={styles.container}>
         <Animated.View style={{bottom: this.state.initialPosition}}>
-          <View style={{height:KeyboardHeight}}/>
-          <View style={{height:height/10*9+10-KeyboardHeight,backgroundColor:'rgb(102,137,186)',justifyContent:'flex-end',alignItems:'flex-end'}}>
+          <View style={{height:messageBoxPosition,backgroundColor:'rgb(102,137,186)'}}/>
+          <View style={{height:height/10*9+10-messageBoxPosition,backgroundColor:'rgb(102,137,186)',justifyContent:'flex-end',alignItems:'flex-end'}}>
             <ScrollView 
               ref={ref => this.scrollView = ref}
               onContentSizeChange={(contentWidth, contentHeight)=>{        
@@ -110,6 +116,7 @@ class ChatPresenter extends React.Component {
             </TouchableOpacity>
             <View style={{width:'75%',height:'70%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
                   <TextInput
+                    autoFocus={true}
                     value={message}
                     onChangeText={changeMessage}
                     autoCompleteType={false}
@@ -118,7 +125,7 @@ class ChatPresenter extends React.Component {
                     multiline={true}
                     style={{fontSize: 15,width:'80%',marginBottom:2}}
                   />
-              <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}}>
+              <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}} onPressOut={Keyboard.dismiss}>
                 <SimpleLineIcons name='emotsmile' size={25} color='rgb(141,147,163)' style={{marginTop:2}} />
               </TouchableOpacity>
             </View>
@@ -127,6 +134,7 @@ class ChatPresenter extends React.Component {
             </TouchableOpacity>
           </View>
         </Animated.View>
+        
       </View>
     )
   }
