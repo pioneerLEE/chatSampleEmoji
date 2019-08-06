@@ -64,15 +64,18 @@ class ChatPresenter extends React.Component {
   }
 
   _keyboardHide = (e) => {
-    this.setState({
-      messageBoxPosition:0
-    });
-    Animated.timing(
-      this.state.initialPosition,
-      {
-        toValue: 0
-      }
-    ).start();
+    const {isShowEmoticonSection} = this.state;
+    if(!isShowEmoticonSection){
+      this.setState({
+        messageBoxPosition:0
+      });
+      Animated.timing(
+        this.state.initialPosition,
+        {
+          toValue: 0
+        }
+      ).start();
+    }
   }
 
   _keyboardShow = (e) => {
@@ -88,12 +91,40 @@ class ChatPresenter extends React.Component {
       
     ).start();
   }
-  _showEmoticonSection=()=>{
+  _EmoticonSection=async()=>{
     
+    await this.setState({
+      isShowEmoticonSection:!this.state.isShowEmoticonSection
+    })
+    if(this.state.isShowEmoticonSection){
+      await Animated.timing(
+        this.state.initialPosition,
+        {
+          toValue: this.state.keyboardHeight
+        }
+        
+      ).start();
+      await Keyboard.dismiss();
+    }
+    else{
+      await Animated.timing(
+        this.state.initialPosition,
+        {
+          toValue: 0
+        }
+        
+      ).start();
+    }
+    
+  }
+  _hideEmoticonSection=()=>{
+    this.setState({
+      isShowEmoticonSection:false
+    })
   }
   render() {
     const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom } = this.props;
-    const { messageBoxPosition,isShowEmoticonSection } = this.state; 
+    const { messageBoxPosition,isShowEmoticonSection,keyboardHeight } = this.state; 
     return (
       <View style={styles.container}>
         <Animated.View style={{bottom: this.state.initialPosition}}>
@@ -116,6 +147,7 @@ class ChatPresenter extends React.Component {
             </TouchableOpacity>
             <View style={{width:'75%',height:'70%',backgroundColor:'rgb(246,246,246)',borderRadius: 20, alignItems:'center',paddingLeft:20,marginRight:10,flexDirection:'row',justifyContent:'space-between'}}>
                   <TextInput
+                    onFocus={this._hideEmoticonSection}
                     autoFocus={true}
                     value={message}
                     onChangeText={changeMessage}
@@ -125,7 +157,7 @@ class ChatPresenter extends React.Component {
                     multiline={true}
                     style={{fontSize: 15,width:'80%',marginBottom:2}}
                   />
-              <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}} onPressOut={Keyboard.dismiss}>
+              <TouchableOpacity style={{width:30,height:30,borderRadius:15,marginRight:10}} onPressOut={this._EmoticonSection}>
                 <SimpleLineIcons name='emotsmile' size={25} color='rgb(141,147,163)' style={{marginTop:2}} />
               </TouchableOpacity>
             </View>
@@ -133,8 +165,8 @@ class ChatPresenter extends React.Component {
               <MaterialCommunityIcons name='send-circle' size={30} color='rgb(83,181,53)' style={{marginTop:2}} />
             </TouchableOpacity>
           </View>
+          <View style={{width:width,height:keyboardHeight}}/>
         </Animated.View>
-        
       </View>
     )
   }
