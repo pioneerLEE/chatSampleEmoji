@@ -7,6 +7,8 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import PropTypes from 'prop-types';
+const Emoji_API = "http://5e297431.ngrok.io" 
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
@@ -42,6 +44,31 @@ MessageBubble=(props)=>{
         ) 
     )
 }
+EmojiBubble=(props)=>{
+    const current = new Date(props.chat.createAt)
+    return (
+        props._isUser ?
+        (
+            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
+                <View style={{marginRight:8}}>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{current.getHours() + "시 " + current.getMinutes() + "분"}</Text>
+                </View>
+                <View style={{width: 125,height:125, borderRadius: 20,marginTop:10,justifyContent:'center',alignItems:'center'}}>
+                    <Image style={{width:125,height:125}} source={{uri:`${Emoji_API}/load/${props.chat.messageData}/ChatSample1/abcabc`}}/>
+                </View>
+            </View>
+        ):(
+            <View style={{flexDirection:'row', alignItems:'flex-end'}}>
+                <View style={{width: 125,height:125,borderRadius:20,marginTop:10,justifyContent:'center',alignItems:'center'}}>
+                    <Image style={{width:125,height:125}} source={{uri:`${Emoji_API}/load/${props.chat.messageData}/ChatSample1/abcabc`}}/>
+                </View>
+                <View style={{marginLeft:8}}>
+                    <Text style={{marginBottom:1,fontSize:9, color:'white'}}>{current.getHours() + "시 " + current.getMinutes() + "분"}</Text>
+                </View>
+            </View>
+        ) 
+    )
+}
 class Message extends React.Component {
     
   //maxWidth
@@ -58,7 +85,8 @@ class Message extends React.Component {
         <View style={styles.container}>
             {
                 chats.map((chat, key)=>{
-                    if( exRoom._id==chat.room && chat.creator != USER._id && chat.category=='text'){
+                    
+                    if( exRoom._id==chat.room && chat.creator != USER._id && chat.category=='text'){ //상대가 보낸 텍스트 메시지
                         return(
                             <View style={{backgroundColor:'transparent',marginLeft:10}}>
                                 <MessageBubble chat={chat} _isUser={false} />
@@ -66,7 +94,7 @@ class Message extends React.Component {
                         )
                         
                     }
-                    else if( exRoom._id==chat.room && chat.creator == USER._id && chat.category=='text'){
+                    else if( exRoom._id==chat.room && chat.creator == USER._id && chat.category=='text'){ //본인이 보낸 텍스트 메시지
                         return(
                             <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
                                 <MessageBubble chat={chat} _isUser={true} />
@@ -74,10 +102,18 @@ class Message extends React.Component {
                         )
                         
                     }
-                    else if( exRoom._id==chat.room && chat.creator == USER._id && chat.category=='emoji'){
+                    else if( exRoom._id==chat.room && chat.creator == USER._id && chat.category=='emoji'){ //자신이 보낸 emoji 메시지
                         return(
                             <View style={{backgroundColor:'transparent',marginRight:10,alignItems:'flex-end'}}>
-                                <MessageBubble chat={chat} _isUser={true} />
+                                <EmojiBubble chat={chat} _isUser={true} />
+                            </View>
+                        )
+                        
+                    }
+                    else if( exRoom._id==chat.room && chat.creator != USER._id && chat.category=='emoji'){ //타인이 보낸 emoji 메시지
+                        return(
+                            <View style={{backgroundColor:'transparent',marginLeft:10}}>
+                                <EmojiBubble chat={chat} _isUser={false} />
                             </View>
                         )
                         

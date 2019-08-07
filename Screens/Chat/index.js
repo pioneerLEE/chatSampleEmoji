@@ -68,6 +68,7 @@ class Chat extends Component {
       changeMessage={this._changeMessage}
       sendMessage={this._sendMessage}
       loadEmoji={this._loadEmoji}
+      sendEmoji={this._sendEmoji}
       />
     );
   }
@@ -110,7 +111,20 @@ class Chat extends Component {
       message:""
     })
   }
-
+  _sendEmoji=imgURL=>{
+    const { exRoom, USER }=this.state
+    fetch(`${API_URL}/room/${exRoom._id}/message`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        userId:USER._id,
+        category:'emoji',
+        messageData : imgURL
+      })
+    })
+  }
   _sendingTEXT=()=>{
     const { exRoom, USER, message }=this.state
     fetch(`${API_URL}/room/${exRoom._id}/message`,{

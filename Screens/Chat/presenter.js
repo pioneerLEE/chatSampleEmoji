@@ -9,7 +9,7 @@ import {
   Dimensions,
   ScrollView,
   Animated,
-  Keyboard
+  Keyboard,
 } from 'react-native';
 import { ifIphoneX,getBottomSpace } from 'react-native-iphone-x-helper';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -44,7 +44,8 @@ class ChatPresenter extends React.Component {
     message: PropTypes.string.isRequired,
     changeMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
-    emoticons:PropTypes.object.isRequired
+    emoticons:PropTypes.object.isRequired,
+    sendEmoji:PropTypes.func.isRequired
   };
   constructor(props) {
     super(props);
@@ -125,7 +126,7 @@ class ChatPresenter extends React.Component {
     })
   }
   render() {
-    const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom,emoticons } = this.props;
+    const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom,emoticons,sendEmoji } = this.props;
     const { messageBoxPosition,isShowEmoticonSection,keyboardHeight } = this.state; 
     return (
       <View style={styles.container}>
@@ -171,12 +172,14 @@ class ChatPresenter extends React.Component {
           {
             isShowEmoticonSection?(
               <View style={{width:'100%',height:'100%'}}>
-                <ScrollView>
+                <ScrollView horizontal={true} style={{flexDirection:'row'}}>
                 {
                   emoticons[0].sample1.map((e,key)=>{
                     return(
-                      <View style={{width:width,height:width,margin:10}}>
-                        <Image style={{width:width,height:width}} source={{uri:`${Emoji_API}/load/${e}/ChatSample1/abcabc`}}/>
+                      <View style={{width:keyboardHeight,height:keyboardHeight,justifyContent:'center',alignItems:'center'}}>
+                        <TouchableOpacity style={{marginBottom:10}} onPressOut={()=>{sendEmoji(e)}}>
+                          <Image style={{width:keyboardHeight-10,height:keyboardHeight-10}} source={{uri:`${Emoji_API}/load/${e}/ChatSample1/abcabc`}}/>
+                        </TouchableOpacity>
                       </View>
                     )
                   })
