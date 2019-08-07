@@ -4,7 +4,8 @@ import { Alert,Dimensions,TouchableOpacity } from "react-native";
 import ChatPresenter from './presenter';
 import SocketIOClient from 'socket.io-client/dist/socket.io.js';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import { API_URL } from '../../constants'; 
+import { API_URL } from '../../constants';
+const Emoji_API = "http://5e297431.ngrok.io" 
 
 const { height, width } = Dimensions.get('screen');
 
@@ -38,7 +39,7 @@ class Chat extends Component {
       await goBack();
     }
     return {
-      title:'방 목록',
+      title:'이재원',
       headerLeft:(
         <TouchableOpacity style={{marginLeft:10}} onPressOut={_out}>
           <SimpleLineIcons name='arrow-left' size={25} color='rgb(226,226,226)' />
@@ -52,7 +53,7 @@ class Chat extends Component {
     exRoom:{},
     chats:[],
     message:"",
-    emoji:null,
+    emoticons:null,
     image:null,
 
   };
@@ -66,6 +67,7 @@ class Chat extends Component {
       {...this.props}
       changeMessage={this._changeMessage}
       sendMessage={this._sendMessage}
+      loadEmoji={this._loadEmoji}
       />
     );
   }
@@ -73,19 +75,35 @@ class Chat extends Component {
     this.props.navigation.setParams({
         outChat: this._outChat
     });
-}
-_outChat=()=>{
-  const { exRoom, USER }=this.state
-  fetch(`${API_URL}/room/${exRoom._id}`,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body: JSON.stringify({
-      userId:USER._id,
+  }
+  _loadEmoji=()=>{
+    fetch(`${Emoji_API}/init`,{
+      method:"GET",
+      headers:{
+        "Content-Type":"application/json"
+      },
     })
-  })
-}
+    .then(response=>{
+      return response.json();
+    })
+    .then(json=>{
+      this.setState({
+        emoticons:json
+      })
+    })
+  }
+  _outChat=()=>{
+    const { exRoom, USER }=this.state
+    fetch(`${API_URL}/room/${exRoom._id}`,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({
+        userId:USER._id,
+      })
+    })
+  }
   _sendMessage= async() =>{
     await this._sendingTEXT();
     await this.setState({
@@ -118,6 +136,7 @@ _outChat=()=>{
     await this._getRoominfo(id);
     //해당 채팅방에 참가히기
     await this._joinRoom(id);
+    await this._loadEmoji();
   };
   _getRoominfo = (id) =>{
     console.log('_getRoominfo1',id);

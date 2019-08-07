@@ -17,6 +17,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Message from './message';
 const { width } = Dimensions.get('screen');
 const height = Dimensions.get('screen').height/667*600;
+const Emoji_API = "http://5e297431.ngrok.io" 
 
 import PropTypes from 'prop-types';
 import { TextInput } from 'react-native-gesture-handler';
@@ -43,6 +44,7 @@ class ChatPresenter extends React.Component {
     message: PropTypes.string.isRequired,
     changeMessage: PropTypes.func.isRequired,
     sendMessage: PropTypes.func.isRequired,
+    emoticons:PropTypes.object.isRequired
   };
   constructor(props) {
     super(props);
@@ -123,7 +125,7 @@ class ChatPresenter extends React.Component {
     })
   }
   render() {
-    const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom } = this.props;
+    const { navigation,chats,USER,message,changeMessage,sendMessage,exRoom,emoticons } = this.props;
     const { messageBoxPosition,isShowEmoticonSection,keyboardHeight } = this.state; 
     return (
       <View style={styles.container}>
@@ -165,7 +167,25 @@ class ChatPresenter extends React.Component {
               <MaterialCommunityIcons name='send-circle' size={30} color='rgb(83,181,53)' style={{marginTop:2}} />
             </TouchableOpacity>
           </View>
-          <View style={{width:width,height:keyboardHeight}}/>
+          <View style={{width:width,height:keyboardHeight}}>
+          {
+            isShowEmoticonSection?(
+              <View style={{width:'100%',height:'100%'}}>
+                <ScrollView>
+                {
+                  emoticons[0].sample1.map((e,key)=>{
+                    return(
+                      <View style={{width:width,height:width,margin:10}}>
+                        <Image style={{width:width,height:width}} source={{uri:`${Emoji_API}/load/${e}/ChatSample1/abcabc`}}/>
+                      </View>
+                    )
+                  })
+                }
+                </ScrollView>
+              </View>
+            ):(null)
+          }
+          </View>
         </Animated.View>
       </View>
     )
