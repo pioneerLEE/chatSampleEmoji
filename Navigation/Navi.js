@@ -15,7 +15,7 @@ const Navi = createStackNavigator({
   RoomlistScreen : { screen: RoomList  },
   ChatScreen : { screen: Chat  },
 }, {
-  initialRouteName: 'SigninScreen',
+  initialRouteName: 'ChatScreen',
   defaultNavigationOptions:{
     headerBackTitle:null,
     headerStyle:{
